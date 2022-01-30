@@ -85,8 +85,8 @@ int main(int argc, char *argv[])
 {
         if (argc >= 3)
         {
-                char * str1 = argv[1];
-                char * str2 = argv[2];
+                char *str1 = argv[1];
+                char *str2 = argv[2];
 
                 str1 = reverse(str1);
                 str2 = reverse(str2);
