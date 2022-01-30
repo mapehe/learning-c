@@ -4,7 +4,7 @@
 
 char* reverse(char str[]){
     size_t len = strlen(str);
-    int max_str_index = len-1;
+    int max_str_index = len - 1;
     int max_loop_index = len / 2;
     char tmp; 
     
