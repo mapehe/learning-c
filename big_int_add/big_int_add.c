@@ -3,82 +3,37 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "reverse.h"
+char *large_sum(char* str1, char* str2){
+        int len1 = strlen(str1);
+        int len2 = strlen(str2);
+        int max_len = len1 > len2 ? len1 : len2;
 
-typedef struct integer_node
-{
-        int val;
-        struct integer_node *next;
-} node_t;
+        char * output = malloc(sizeof(char)*max_len);
+        int sum = 0;
 
-size_t NODE_SIZE = sizeof(node_t);
-const int CHARS_PER_NODE = 1;
+        for(int i = 0; i < max_len; i++){
+                int idx1 = len1 - i - 1;
+                int idx2 = len2 - i - 1;
 
-node_t *node_from_string(char *str)
-{
-        size_t len1 = strlen(str);
+                int val1 = idx1 >= 0 ? str1[idx1] - '0' : 0;
+                int val2 = idx2 >= 0 ? str2[idx2] - '0' : 0;
 
-        if (len1 == 0)
-                return NULL;
-
-        node_t *nod = malloc(NODE_SIZE);
-        char tmp[2];
-        tmp[0] = str[0];
-        tmp[1] = '\0';
-        nod->val = atoi(tmp);
-        nod->next = node_from_string(str + 1);
-
-        return nod;
-}
-
-void clear_node(node_t *node)
-{
-        if (node->next != NULL)
-                clear_node(node->next);
-        free(node);
-}
-
-node_t *node_sum(node_t *node1, node_t *node2, int add)
-{
-
-        node_t *nod = malloc(NODE_SIZE);
-        int sum = node1->val + node2->val;
-
-        nod->val = sum % (10 * CHARS_PER_NODE) + add;
-        nod->next = NULL;
-
-        node_t *next1 = malloc(NODE_SIZE);
-        next1->val = 0;
-        next1->next = NULL;
-
-        node_t *next2 = malloc(NODE_SIZE);
-        next2->val = 0;
-        next2->next = NULL;
-
-        int next_add = sum / (10 * CHARS_PER_NODE);
-
-        if (node1->next != NULL)
-                memcpy(next1, node1->next, NODE_SIZE);
-
-        if (node2->next != NULL)
-                memcpy(next2, node2->next, NODE_SIZE);
-
-        if (next_add > 0 || node1->next != NULL || node2->next != NULL)
-        {
-                nod->next = node_sum(next1, next2, next_add);
+                sum = val1 + val2 + sum;
+                int idxO = max_len - i - 1;
+                output[idxO] = (sum % 10) + '0';
+                sum = sum / 10;
         }
-
-        free(next1);
-        free(next2);
-
-        return nod;
-}
-
-void print_node(node_t *node)
-{
-        if (node->next != NULL)
-                print_node(node->next);
-        printf("%d", node->val);
+        
+        if(sum > 0) {
+                char * output_with_one = malloc(sizeof(*output) + sizeof(char));
+                output_with_one[0] = '1';
+                strncat(output_with_one, output, sizeof(*output));
+                free(output);
+                return output_with_one;
+        }
+        else{
+                return output;
+        }
 }
 
 int main(int argc, char *argv[])
@@ -88,19 +43,9 @@ int main(int argc, char *argv[])
                 char *str1 = argv[1];
                 char *str2 = argv[2];
 
-                str1 = reverse(str1);
-                str2 = reverse(str2);
-
-                node_t *head1 = node_from_string(str1);
-                node_t *head2 = node_from_string(str2);
-
-                node_t *sum = node_sum(head1, head2, 0);
-                print_node(sum);
-                printf("\n");
-
-                clear_node(head1);
-                clear_node(head2);
-                clear_node(sum);
+                char *sum = large_sum(str1, str2);
+                printf("%s\n", sum);
+                free(sum);
         }
         return 0;
 }

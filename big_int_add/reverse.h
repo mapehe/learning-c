@@ -1,1 +1,0 @@
-char *reverse(char str[]);
