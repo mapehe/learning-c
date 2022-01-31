@@ -3,15 +3,17 @@
 #include <string.h>
 #include <stdlib.h>
 
-char *large_sum(char* str1, char* str2){
+char *large_sum(char *str1, char *str2)
+{
         int len1 = strlen(str1);
         int len2 = strlen(str2);
         int max_len = len1 > len2 ? len1 : len2;
 
-        char * output = malloc(sizeof(char)*max_len);
+        char *output = malloc(sizeof(char) * max_len);
         int sum = 0;
 
-        for(int i = 0; i < max_len; i++){
+        for (int i = 0; i < max_len; i++)
+        {
                 int idx1 = len1 - i - 1;
                 int idx2 = len2 - i - 1;
 
@@ -23,15 +25,17 @@ char *large_sum(char* str1, char* str2){
                 output[idxO] = (sum % 10) + '0';
                 sum = sum / 10;
         }
-        
-        if(sum > 0) {
-                char * output_with_one = malloc(sizeof(*output) + sizeof(char));
+
+        if (sum > 0)
+        {
+                char *output_with_one = malloc(sizeof(*output) + sizeof(char));
                 output_with_one[0] = '1';
                 strncat(output_with_one, output, sizeof(*output));
                 free(output);
                 return output_with_one;
         }
-        else{
+        else
+        {
                 return output;
         }
 }
